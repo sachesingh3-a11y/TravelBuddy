@@ -11,7 +11,8 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "expo": "^55.0.5"
+    "expo": "^55.0.5",
+    "react-native-barcode-builder": "^2.0.0"
   },
   "devDependencies": {
     "@types/react": "~19.2.10",
