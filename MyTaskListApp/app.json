@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "my-apps",
-    "slug": "my-apps",
+    "name": "MyTaskListApp",
+    "slug": "MyTaskListApp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapps",
+    "scheme": "mytasklistapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
