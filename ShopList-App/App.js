@@ -4,6 +4,8 @@ import {
   FlatList,
   Text,
   TextInput,
+  KeyboardAvoidingView, // ✅ TAMBAHAN
+  Platform              // ✅ TAMBAHAN
 } from 'react-native';
 
 import { PRODUCTS } from './data/products';
@@ -11,34 +13,12 @@ import ProductCard from './components/ProductCard';
 
 export default function App() {
 
-  // =========================
-  // 🔍 SEARCH
-  // =========================
   const [search, setSearch] = useState('');
-
-  // =========================
-  // 🔄 REFRESH
-  // =========================
   const [refreshing, setRefreshing] = useState(false);
-
-  // =========================
-  // 🎯 FILTER KATEGORI
-  // =========================
   const [selectedCategory, setSelectedCategory] = useState('Semua');
-
-  // =========================
-  // 🔳 GRID / LIST
-  // =========================
   const [numColumns, setNumColumns] = useState(1);
-
-  // =========================
-  // 🔽 SORT
-  // =========================
   const [sortBy, setSortBy] = useState('default');
 
-  // =========================
-  // 🔄 REFRESH FUNCTION
-  // =========================
   const onRefresh = () => {
     setRefreshing(true);
     setTimeout(() => {
@@ -46,14 +26,8 @@ export default function App() {
     }, 2000);
   };
 
-  // =========================
-  // 📦 AMBIL KATEGORI
-  // =========================
   const categories = ['Semua', ...new Set(PRODUCTS.map(item => item.category))];
 
-  // =========================
-  // 🔍 FILTER + 🎯 + 🔽 SORT
-  // =========================
   const filteredData = PRODUCTS
     .filter(item => {
       const matchSearch = item.name.toLowerCase().includes(search.toLowerCase());
@@ -70,11 +44,14 @@ export default function App() {
     });
 
   return (
-    <View style={{ flex: 1 }}>
 
-      {/* ========================= */}
+    // ✅ INI BAGIAN YANG DITAMBAHKAN (WRAPPER UTAMA)
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
+
       {/* 🔍 SEARCH BAR */}
-      {/* ========================= */}
       <TextInput
         placeholder="Cari produk..."
         value={search}
@@ -87,9 +64,7 @@ export default function App() {
         }}
       />
 
-      {/* ========================= */}
       {/* 🎛️ FILTER KATEGORI */}
-      {/* ========================= */}
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', margin: 10 }}>
         {categories.map((cat) => (
           <Text
@@ -108,9 +83,7 @@ export default function App() {
         ))}
       </View>
 
-      {/* ========================= */}
       {/* 🔘 TOGGLE GRID */}
-      {/* ========================= */}
       <Text
         onPress={() => setNumColumns(numColumns === 1 ? 2 : 1)}
         style={{
@@ -125,18 +98,14 @@ export default function App() {
         Toggle {numColumns === 1 ? 'Grid' : 'List'}
       </Text>
 
-      {/* ========================= */}
       {/* 🔽 SORT */}
-      {/* ========================= */}
-      <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginBottom: 10 }}>
-        <Text onPress={() => setSortBy('low')} style={{ padding: 8 }}>Harga ↑</Text>
-        <Text onPress={() => setSortBy('high')} style={{ padding: 8 }}>Harga ↓</Text>
-        <Text onPress={() => setSortBy('rating')} style={{ padding: 8 }}>Rating ⭐</Text>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+        <Text onPress={() => setSortBy('low')}>Harga ↑</Text>
+        <Text onPress={() => setSortBy('high')}>Harga ↓</Text>
+        <Text onPress={() => setSortBy('rating')}>Rating ⭐</Text>
       </View>
 
-      {/* ========================= */}
       {/* 📋 FLATLIST */}
-      {/* ========================= */}
       <FlatList
         key={numColumns}
         numColumns={numColumns}
@@ -144,7 +113,6 @@ export default function App() {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <ProductCard product={item} />}
 
-        // ❌ EMPTY STATE
         ListEmptyComponent={() => (
           <View style={{ alignItems: 'center', marginTop: 50 }}>
             <Text style={{ fontSize: 40 }}>😢</Text>
@@ -153,10 +121,10 @@ export default function App() {
           </View>
         )}
 
-        // 🔄 REFRESH
         refreshing={refreshing}
         onRefresh={onRefresh}
       />
-    </View>
+
+    </KeyboardAvoidingView> // ✅ PENUTUP WRAPPER
   );
 }
